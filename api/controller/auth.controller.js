@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
+import { errorHandler } from "../utils/error.js";
+
 // localhost:4000/api/auth/signup
 
 export const signup = async (req, res, next) => {
@@ -15,10 +17,7 @@ export const signup = async (req, res, next) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({
-        success: false,
-        message: "User Already Exists",
-      });
+      return next(errorHandler(400, "User Already Exists"));
     }
 
     // Secure the password
