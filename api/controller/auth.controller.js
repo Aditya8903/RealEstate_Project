@@ -58,7 +58,7 @@ export const signin = async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, validUser.password);
 
     if (!validPassword) {
-      return next(errorHandler(401, "Wrong credentials! Email not registered"));
+      return next(errorHandler(401, "Wrong Password! Please try again"));
     }
     //generate token using jwt
     //jwt.sign(unique id of user like "id here",secret)
