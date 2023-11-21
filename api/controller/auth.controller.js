@@ -61,7 +61,7 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(401, "Wrong credentials! Email not registered"));
     }
     //generate token using jwt
-    //jwt.sign(unique id like "id here",secret)
+    //jwt.sign(unique id of user like "id here",secret)
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     //separating password and rest information
     const { password: pass, ...rest } = validUser._doc; //._doc was containing password
