@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "appspot",
+        "brcypt",
         "firebaseapp",
         "Perc",
         "persistor",
@@ -11,5 +12,8 @@
         "signup",
         "tailwindcss",
         "TZ3YLDFS6D"
-    ]
+    ],
+    "docwriter.progress.trackFunctions": false,
+    "docwriter.progress.trackMethods": false,
+    "docwriter.progress.trackClasses": true
 }

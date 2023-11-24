@@ -20,10 +20,10 @@ export default function CreateListing() {
     name: '',
     description: '',
     address: '',
-    type: 'rent',
+    type: ' ',
     bedrooms: 1,
     bathrooms: 1,
-    regularPrice: 50,
+    regularPrice: 10000,
     discountPrice: 0,
     offer: false,
     parking: false,
@@ -95,10 +95,13 @@ export default function CreateListing() {
     });
   };
 
+
+  //filter those index that are not of image need to be deleted  
   const handleRemoveImage = (index) => {
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
+
     });
   };
 
@@ -109,7 +112,7 @@ export default function CreateListing() {
         type: e.target.id,
       });
     }
-
+   //for checkboxes
     if (
       e.target.id === 'parking' ||
       e.target.id === 'furnished' ||
@@ -120,7 +123,7 @@ export default function CreateListing() {
         [e.target.id]: e.target.checked,
       });
     }
-
+   //for inputs
     if (
       e.target.type === 'number' ||
       e.target.type === 'text' ||
@@ -136,8 +139,10 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // images constraint
       if (formData.imageUrls.length < 1)
         return setError('You must upload at least one image');
+      // price constraints
       if (+formData.regularPrice < +formData.discountPrice)
         return setError('Discount price must be lower than regular price');
       setLoading(true);
