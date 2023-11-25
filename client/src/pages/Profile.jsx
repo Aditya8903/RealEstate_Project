@@ -29,6 +29,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+  const[showListingError,setShowListingError] = useState(false);
   const dispatch = useDispatch()
   console.log(formData);
   console.log(file);
@@ -124,6 +126,22 @@ const Profile = () => {
       dispatch(deleteUserFailure(error.message));
     }
   }
+
+  const handleShowListings = async()=>{
+    try{
+      setShowListingError(false);
+      const res = await fetch(`/api/user/listing/${currentUser._id}`);
+      const data = await res.json();
+      if(data.success==false){
+        setShowListingError(true);
+        return;
+      }
+      setUserListings(data)
+    }catch(error){
+      setShowListingError(true)
+    }
+  }
+
   return (
     <div className='p-3 max-w-lg mx-auto'> 
       <h1 className='text-3xl font-semibold text-center my-7'>
@@ -189,7 +207,32 @@ const Profile = () => {
       <p className='text-green-700 mt-5 mx-auto'>
         {updateSuccess ? 'User is updated successfully!' : ''}
       </p>
-      
+      <button onClick={handleShowListings} className='text-green-700 w-full'>
+        Show Listings
+      </button>
+      <p className = "text-red-700 mt-5">
+        {showListingError ? 'Error in showing Listing of property':''}
+      </p>
+
+      {
+      userListings && userListings.length > 0  && 
+      userListings.map(
+        (listing)=>
+          <div key={showListingError._id } 
+          className='border rounded-lg p-3 flex justify-between items-center gap-4'>
+            <Link to = {`/listing/${listing._id}`}>
+              <img  src={listing.imageUrls[0]} alt="Cover image of listing" className='h-24 w-24 object-contain' />
+            </Link>
+            <Link
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+
+          </div>
+      )
+      }
     </div>
   )
 }
