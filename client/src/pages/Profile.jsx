@@ -132,6 +132,8 @@ const Profile = () => {
       setShowListingError(false);
       const res = await fetch(`/api/user/listing/${currentUser._id}`);
       const data = await res.json();
+      console.log(data);
+
       if(data.success==false){
         setShowListingError(true);
         return;
@@ -142,6 +144,32 @@ const Profile = () => {
     }
   }
 
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to delete listing');
+      }
+  
+      const data = await res.json();
+  
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+  
+      // Update user listings - remove the deleted listing
+      setUserListings((prevData) =>
+        prevData.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  
   return (
     <div className='p-3 max-w-lg mx-auto'> 
       <h1 className='text-3xl font-semibold text-center my-7'>
@@ -229,7 +257,17 @@ const Profile = () => {
               >
                 <p>{listing.name}</p>
               </Link>
-
+              <div className='flex flex-col item-center'>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className='text-red-700 uppercase'
+                >
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
+              </div>
           </div>
       )
       }
