@@ -1,11 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+import { useSelector } from 'react-redux';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css/bundle';
+import {
+  FaBath,
+  FaBed,
+  FaChair,
+  FaMapMarkerAlt,
+  FaParking,
+} from 'react-icons/fa';
 
 export default function Listing() {
+  SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const params = useParams();
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -30,29 +44,75 @@ export default function Listing() {
   }, [params.listingId]);
 
   return (
-    <main className="max-w-screen-md mx-auto mt-8">
-      {loading && <p>Loading...</p>}
-      {error && <p>Something went wrong!</p>}
+    <main>
+      {loading && <p className='text-center my-7 text-2xl'>Loading...</p>}
+      {error && (
+        <p className='text-center my-7 text-2xl'>Something went wrong!</p>
+      )}
       {listing && !loading && !error && (
-        <div className="flex flex-col gap-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {listing.imageUrls.map((url, index) => (
-              <img key={index} src={url} alt={`Image ${index}`} className="w-full h-96 object-cover rounded-lg shadow-lg" />
+        <div>
+          <Swiper navigation>
+            {listing.imageUrls.map((url) => (
+              <SwiperSlide key={url}>
+                <div
+                  className='h-[550px]'
+                  style={{
+                    background: `url(${url}) center no-repeat`,
+                    backgroundSize: 'cover',
+                  }}
+                ></div>
+              </SwiperSlide>
             ))}
-          </div>
-          <div className="text-gray-800">
-            <p className="text-3xl font-bold">{listing.name}</p>
-            <p className="text-2xl">&#8377;{listing.offer ? listing.discountPrice : listing.regularPrice}</p>
-            <p className="text-lg">{listing.type === 'rent' ? 'For Rent' : 'For Sale'}</p>
-            <p className="text-base leading-7">{listing.description}</p>
-            <p className="text-base">{listing.address}</p>
-            <p className="text-base">
-              Bedrooms: {listing.bedrooms}, Bathrooms: {listing.bathrooms}
+          </Swiper>
+          <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
+            <p className='text-2xl font-semibold'>
+              {listing.name} - ${' '}
+              {listing.offer
+                ? listing.discountPrice.toLocaleString('en-US')
+                : listing.regularPrice.toLocaleString('en-US')}
+              {listing.type === 'rent' && ' / month'}
             </p>
-            {listing.parking && <p className="text-base text-red-500">Parking spot available</p>}
-            <p className={`text-base ${listing.furnished ? 'text-yellow-500' : 'text-gray-500'}`}>
-              {listing.furnished ? 'Furnished' : 'Unfurnished'}
+            <p className='flex items-center mt-6 gap-2 text-slate-600  text-sm'>
+              <FaMapMarkerAlt className='text-green-700' />
+              {listing.address}
             </p>
+            <div className='flex gap-4'>
+              <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                {listing.type === 'rent' ? 'For Rent' : 'For Sale'}
+              </p>
+              {listing.offer && (
+                <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                  ${+listing.regularPrice - +listing.discountPrice} OFF
+                </p>
+              )}
+            </div>
+            <p className='text-slate-800'>
+              <span className='font-semibold text-black'>Description - </span>
+              {listing.description}
+            </p>
+            <ul className='text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
+              <li className='flex items-center gap-1 whitespace-nowrap '>
+                <FaBed className='text-lg' />
+                {listing.bedrooms > 1
+                  ? `${listing.bedrooms} beds `
+                  : `${listing.bedrooms} bed `}
+              </li>
+              <li className='flex items-center gap-1 whitespace-nowrap '>
+                <FaBath className='text-lg' />
+                {listing.bathrooms > 1
+                  ? `${listing.bathrooms} baths `
+                  : `${listing.bathrooms} bath `}
+              </li>
+              <li className='flex items-center gap-1 whitespace-nowrap '>
+                <FaParking className='text-lg' />
+                {listing.parking ? 'Parking spot' : 'No Parking'}
+              </li>
+              <li className='flex items-center gap-1 whitespace-nowrap '>
+                <FaChair className='text-lg' />
+                {listing.furnished ? 'Furnished' : 'Unfurnished'}
+              </li>
+            </ul>
+            {/* Remove contact button and Contact component */}
           </div>
         </div>
       )}
