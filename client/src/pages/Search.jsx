@@ -4,6 +4,7 @@ import ListingItem from '../components/ListingItem';
 
 export default function Search() {
   const navigate = useNavigate();
+  // side bar data with default values
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     type: 'all',
@@ -27,7 +28,7 @@ export default function Search() {
     const offerFromUrl = urlParams.get('offer');
     const sortFromUrl = urlParams.get('sort');
     const orderFromUrl = urlParams.get('order');
-
+// if change inn any of these values
     if (
       searchTermFromUrl ||
       typeFromUrl ||
@@ -62,9 +63,10 @@ export default function Search() {
       setListings(data);
       setLoading(false);
     };
-
     fetchListings();
+    
   }, [location.search]);
+  // handle change in checkboxes
 
   const handleChange = (e) => {
     if (
@@ -72,6 +74,7 @@ export default function Search() {
       e.target.id === 'rent' ||
       e.target.id === 'sale'
     ) {
+      // change target type accordingly
       setSidebardata({ ...sidebardata, type: e.target.id });
     }
 
@@ -111,6 +114,7 @@ export default function Search() {
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
     const searchQuery = urlParams.toString();
+    // navigate with search query
     navigate(`/search?${searchQuery}`);
   };
 
@@ -231,6 +235,7 @@ export default function Search() {
           </button>
         </form>
       </div>
+      {/* Right side */}
       <div className='flex-1'>
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
           Listing results:

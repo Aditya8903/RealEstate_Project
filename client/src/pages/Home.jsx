@@ -7,8 +7,6 @@ export default function Home() {
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
 
-  console.log(offerListings);
-
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
@@ -68,14 +66,6 @@ export default function Home() {
           Let's get started...
         </Link>
       </div>
-
-      {/* Banner Image */}
-      {/* <img
-        src="/path/to/your/banner-image.jpg"
-        alt="Banner Image"
-        className="w-full h-auto"
-      /> */}
-
 
       {/* listing results for offer, sale, and rent */}
       <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>

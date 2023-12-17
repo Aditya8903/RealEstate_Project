@@ -64,11 +64,13 @@ export const getListing = async (req, res, next) => {
 
 export const getListings = async (req, res, next) => {
   try {
+    console.log(res);
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
     let offer = req.query.offer;
 
     if (offer === undefined || offer === "false") {
+      // $in means search inside database
       offer = { $in: [false, true] };
     }
 
@@ -99,7 +101,7 @@ export const getListings = async (req, res, next) => {
     const order = req.query.order || "desc";
 
     const listings = await Listing.find({
-      // options - i means not caring of uppercase or lowercase , search term means any term
+      // options - i means not caring of uppercase or lowercase , search term... means any term
       name: { $regex: searchTerm, $options: "i" },
       offer,
       furnished,
