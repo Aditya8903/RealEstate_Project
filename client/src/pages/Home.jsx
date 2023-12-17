@@ -58,6 +58,7 @@ export default function Home() {
           <br />
           We have a wide range of properties for you to choose from.
         </div>
+
         {/* link for search page */}
         <Link
           to={'/search'}
@@ -82,6 +83,7 @@ export default function Home() {
             </div>
           </div>
         )}
+
         {rentListings && rentListings.length > 0 && (
           <div className=''>
             <div className='my-3'>
@@ -95,6 +97,7 @@ export default function Home() {
             </div>
           </div>
         )}
+        
         {saleListings && saleListings.length > 0 && (
           <div className=''>
             <div className='my-3'>
